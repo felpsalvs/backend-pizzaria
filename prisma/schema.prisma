@@ -12,12 +12,72 @@ datasource db {
 
 // criar uma migration: npx prisma migrate dev --name init
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Order     Order[]
 
   @@map("users")
+}
+
+model Category {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  products  Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  price       String
+  banner      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category    Category @relation(fields: [category_id], references: [id])
+  Order       Order?   @relation(fields: [orderId], references: [id])
+  orderId     String?  @db.ObjectId
+
+  @@map("products")
+  category_id String
+  items       Item[]
+}
+
+model Order {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  table     Int
+  status    Boolean  @default(false)
+  draft     Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User      @relation(fields: [user_id], references: [id])
+  user_id  String
+  products Product[]
+
+  @@map("orders")
+  items    Item[]
+}
+
+model Item {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  amount  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  order     Order    @relation(fields: [order_id], references: [id])
+  product   Product  @relation(fields: [product_id], references: [id])
+
+  @@map("items")
+  order_id  String
+  product_id String
 }
