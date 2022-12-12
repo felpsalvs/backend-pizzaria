@@ -12,11 +12,11 @@ class CreateProductService {
 
     const product = await prismaClient.product.create({
       data: {
-        name,
-        price,
-        description,
-        category_id,
-        banner,
+        name: name,
+        price: price,
+        description: description,
+        category_id: category_id,
+        banner: banner,
       },
     });
 
