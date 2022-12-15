@@ -1,1 +1,1 @@
-# Backend do Projeto Web/Mobile para uma pizzaria
+# Backend do Projeto Pizzaria
